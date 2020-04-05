@@ -1,5 +1,6 @@
 import 'package:app_4/providers/cart.dart';
 import 'package:app_4/providers/products.dart';
+import 'package:app_4/screens/cart_screen.dart';
 import 'package:provider/provider.dart';
 
 import '../widgets/products_grid.dart';
@@ -53,14 +54,14 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
               builder: (_, cartData, ch) => Badge(
                 child: ch,
                 value: cartData.numOfItemsInsideCart.toString(),
-                ),
-                child:IconButton(
-                  icon: Icon(Icons.shopping_cart),
-                  onPressed: () {},
-                ),
-                
-                
               ),
+              child: IconButton(
+                icon: Icon(Icons.shopping_cart),
+                onPressed: () {
+                  Navigator.of(context).pushNamed(CartScreen.routeName);
+                },
+              ),
+            ),
           ],
         ),
         body: ProductsGrid(_showFavoritesOnly));
