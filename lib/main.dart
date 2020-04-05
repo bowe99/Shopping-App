@@ -28,20 +28,4 @@ class ShopApp extends StatelessWidget {
   }
 }
 
-class HomePage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          'Shop App',
-        ),
-      ),
-      body: Center(
-        child: Text(
-          'This is my shopping app!',
-        ),
-      ),
-    );
-  }
-}
+
