@@ -1,4 +1,5 @@
-import 'package:app_4/providers/cart.dart';
+import 'package:app_4/providers/cart.dart' show Cart;
+import 'package:app_4/widgets/cart_item.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -32,16 +33,33 @@ class CartScreen extends StatelessWidget {
                   ),
                   Spacer(),
                   Chip(
-                    backgroundColor: Theme.of(context).primaryColor,
-                    label: Text('\$${cart.totalCost}'),
-                  ),
-
+                      backgroundColor: Theme.of(context).primaryColor,
+                      label: Text(
+                        '\$${cart.totalCost}',
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
+                      )),
                   FlatButton(
                     child: Text('Order Now'),
                     onPressed: () {},
                     textColor: Theme.of(context).primaryColor,
                   )
                 ],
+              ),
+            ),
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          Expanded(
+            child: ListView.builder(
+              itemCount: cart.numOfItemsInsideCart,
+              itemBuilder: (ctx, index) => CartItem(
+                id: cart.items.values.toList()[index].id,
+                price: cart.items.values.toList()[index].price,
+                quantity: cart.items.values.toList()[index].quantity,
+                title: cart.items.values.toList()[index].title,
               ),
             ),
           )
