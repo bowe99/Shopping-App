@@ -17,6 +17,7 @@ class ProductItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final product = Provider.of<Product>(context, listen: false);
     final cart = Provider.of<Cart>(context, listen: false);
+
     return ClipRRect(
       borderRadius: BorderRadius.circular(10),
       child: GridTile(
@@ -38,8 +39,26 @@ class ProductItem extends StatelessWidget {
               color: Theme.of(context).accentColor,
               icon: Icon(
                   product.isFavorite ? Icons.favorite : Icons.favorite_border),
-              onPressed: () {
-                product.toggleFavorite();
+              onPressed: () async {
+                try {
+                  await product.toggleFavorite();
+                } catch (error) {
+                  await showDialog(
+                    context: context,
+                    builder: (ctx) => AlertDialog(
+                      title: Text('An error occured!'),
+                      content: Text('Something went wrong'),
+                      actions: <Widget>[
+                        FlatButton(
+                          child: Text('Ok'),
+                          onPressed: () {
+                            Navigator.of(ctx).pop();
+                          },
+                        )
+                      ],
+                    ),
+                  );
+                }
               },
             ),
           ),
@@ -53,14 +72,17 @@ class ProductItem extends StatelessWidget {
             icon: Icon(Icons.add_shopping_cart),
             onPressed: () {
               cart.addItem(product.id, product.price, product.title);
-              
+
               Scaffold.of(context).hideCurrentSnackBar();
               Scaffold.of(context).showSnackBar(SnackBar(
                 content: Text('Added item to cart'),
                 duration: Duration(seconds: 2),
-                action: SnackBarAction(label: 'Undo', onPressed: (){
-                  cart.removeSingleItem(product.id);
-                },),
+                action: SnackBarAction(
+                  label: 'Undo',
+                  onPressed: () {
+                    cart.removeSingleItem(product.id);
+                  },
+                ),
               ));
             },
           ),
