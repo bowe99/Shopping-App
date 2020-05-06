@@ -1,9 +1,7 @@
-import 'dart:convert';
 import 'dart:math';
 
 import 'package:app_4/models/http_exception.dart';
 import 'package:app_4/providers/auth.dart';
-import 'package:app_4/screens/products_overview_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
