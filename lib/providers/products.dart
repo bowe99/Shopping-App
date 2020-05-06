@@ -36,9 +36,9 @@ class Products with ChangeNotifier {
   //   notifyListeners();
   // }
 
-  Future<void> fetchAndSetProducts() async {
-    
-    final productUrl = 'https://shop-app-8139c.firebaseio.com/products.json?auth=$authToken';
+  Future<void> fetchAndSetProducts([bool filterByUser = false]) async {
+    final filterString = filterByUser ? 'orderBy="creatorId"&equalTo="$userId' : '';
+    final productUrl = 'https://shop-app-8139c.firebaseio.com/products.json?auth=$authToken&$filterString';
     final favoriteUrl = 'https://shop-app-8139c.firebaseio.com/userFavorites/$userId.json?auth=$authToken';
 
     try {
@@ -78,6 +78,7 @@ class Products with ChangeNotifier {
             'description': product.description,
             'price': product.price,
             'imageUrl': product.imageUrl,
+            'creatorId': userId,
           }));
 
       final newProduct = Product(
