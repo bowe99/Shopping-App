@@ -21,18 +21,23 @@ class Product with ChangeNotifier {
     @required this.title,
   });
 
-  Future<void> toggleFavorite() async {
+  Future<void> toggleFavorite(String token, String userId) async {
     final url =
-        'https://shop-app-8139c.firebaseio.com/products/$id.json';
+        'https://shop-app-8139c.firebaseio.com/userFavorites/$userId/$id.json?auth=$token';
     var currentFavoriteStatus = isFavorite;
 
     isFavorite = !isFavorite;
     notifyListeners();
 
-    final response = await http.patch(url, body: json.encode({
-      'isFavorite': isFavorite,
-    }));
-    if(response.statusCode >= 400){
+    final response = await http.put(
+      url,
+      body: json.encode(
+        {
+          isFavorite,
+        },
+      ),
+    );
+    if (response.statusCode >= 400) {
       isFavorite = currentFavoriteStatus;
       notifyListeners();
 
