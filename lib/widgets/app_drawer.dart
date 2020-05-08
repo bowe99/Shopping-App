@@ -1,3 +1,4 @@
+import 'package:app_4/helpers/custom_route.dart';
 import 'package:app_4/providers/auth.dart';
 import 'package:app_4/screens/orders_screen.dart';
 import 'package:app_4/screens/user_products_screen.dart';
@@ -28,6 +29,9 @@ class AppDrawer extends StatelessWidget {
             title: Text('Orders'),
             onTap: () {
               Navigator.of(context).pushReplacementNamed(OrdersScreen.routeName);
+              // Navigator.of(context).pushReplacement(CustomRoute(
+              //   builder: (ctx) => OrdersScreen(),
+              // ));
             },
           ),
           Divider(),
@@ -35,10 +39,11 @@ class AppDrawer extends StatelessWidget {
             leading: Icon(Icons.edit),
             title: Text('Manage Products'),
             onTap: () {
-              Navigator.of(context).pushReplacementNamed(UserProductsScreen.routeName);
+              Navigator.of(context)
+                  .pushReplacementNamed(UserProductsScreen.routeName);
             },
           ),
-           Divider(),
+          Divider(),
           ListTile(
             leading: Icon(Icons.exit_to_app),
             title: Text('Logout'),

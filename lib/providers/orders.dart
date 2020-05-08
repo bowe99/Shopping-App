@@ -35,7 +35,6 @@ class Orders with ChangeNotifier {
     final url = 'https://shop-app-8139c.firebaseio.com/orders/$userId.json?auth=$authToken';
     final orderDate = DateFormat('dd/MM/yyyy hh:mm').format(DateTime.now());
 
-    //TODO implement way to add a list to Firebase
 
     final response = await http.post(url,
         body: json.encode({
@@ -75,7 +74,7 @@ class Orders with ChangeNotifier {
         amount: orderData['amount'],
         dateTime: orderData['dateTime'],
         id: orderId,
-        products: (orderData['products'] as List)
+        products: (orderData['products'] as List<dynamic>)
             .map((item) => CartItem(
                   id: item['id'],
                   price: item['price'],
@@ -87,6 +86,5 @@ class Orders with ChangeNotifier {
     });
     _orders = loadedOrders.reversed.toList();
     notifyListeners();
-    print(json.decode(response.body));
   }
 }

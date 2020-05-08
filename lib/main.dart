@@ -1,3 +1,4 @@
+import 'package:app_4/helpers/custom_route.dart';
 import 'package:app_4/providers/auth.dart';
 import 'package:app_4/providers/orders.dart';
 import 'package:app_4/screens/auth_screen.dart';
@@ -46,11 +47,24 @@ class ShopApp extends StatelessWidget {
           builder: (ctx, auth, _) => MaterialApp(
             debugShowCheckedModeBanner: false,
             theme: ThemeData(
-              primarySwatch: Colors.purple,
-              accentColor: Colors.deepOrange,
-              fontFamily: 'Lato',
-            ),
-            home: auth.isAuth ? ProductsOverviewScreen() : FutureBuilder(future: auth.tryAutoLogin(), builder: (ctx, authResultSnapshot) => authResultSnapshot.connectionState == ConnectionState.waiting ? SplashScreen() : AuthScreen()),
+                primarySwatch: Colors.purple,
+                accentColor: Colors.deepOrange,
+                fontFamily: 'Lato',
+                pageTransitionsTheme: PageTransitionsTheme(
+                 builders: {
+                   TargetPlatform.android: CustomPageTransitionBuilder(),
+                   TargetPlatform.iOS: CustomPageTransitionBuilder(),
+                 }
+                )),
+            home: auth.isAuth
+                ? ProductsOverviewScreen()
+                : FutureBuilder(
+                    future: auth.tryAutoLogin(),
+                    builder: (ctx, authResultSnapshot) =>
+                        authResultSnapshot.connectionState ==
+                                ConnectionState.waiting
+                            ? SplashScreen()
+                            : AuthScreen()),
             routes: {
               CartScreen.routeName: (ctx) => CartScreen(),
               ProductDetailScreen.routeName: (ctx) => ProductDetailScreen(),

@@ -5,7 +5,6 @@ import 'dart:convert';
 import 'dart:async';
 import 'package:shared_preferences/shared_preferences.dart';
 
-
 class Auth with ChangeNotifier {
   String _token;
   DateTime _expiryDate;
@@ -31,9 +30,11 @@ class Auth with ChangeNotifier {
 
   Future<void> _authenticate(
       String email, String password, String urlSegment) async {
+    final url =
+        'https://identitytoolkit.googleapis.com/v1/accounts:$urlSegment?key=AIzaSyCzka3aRfim7X0FsE8bTjb8P9nlBd9odmU';
     try {
       final response = await http.post(
-        urlSegment,
+        url,
         body: json.encode(
           {
             'email': email,
@@ -59,7 +60,7 @@ class Auth with ChangeNotifier {
       notifyListeners();
       final prefs = await SharedPreferences.getInstance();
       final userData = json.encode({
-        'token': _token, 
+        'token': _token,
         'userId': _userId,
         'expiryDate': _expiryDate.toIso8601String(),
       });
@@ -70,24 +71,23 @@ class Auth with ChangeNotifier {
   }
 
   Future<void> signup(String email, String password) async {
-    return _authenticate(email, password,
-        'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyCzka3aRfim7X0FsE8bTjb8P9nlBd9odmU');
+    return _authenticate(email, password, 'signUp');
   }
 
   Future<void> signin(String email, String password) async {
-    return _authenticate(email, password,
-        'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyCzka3aRfim7X0FsE8bTjb8P9nlBd9odmU');
+    return _authenticate(email, password, 'signInWithPassword');
   }
 
   Future<bool> tryAutoLogin() async {
     final prefs = await SharedPreferences.getInstance();
-    if(!prefs.containsKey('userData')){
+    if (!prefs.containsKey('userData')) {
       return false;
     }
-    final extractedUserData = json.decode(prefs.getString('userData')) as Map<String, String>;
+    final extractedUserData =
+        json.decode(prefs.getString('userData')) as Map<String, Object>;
     final expiryDate = DateTime.parse(extractedUserData['expiryDate']);
 
-    if(expiryDate.isBefore(DateTime.now())){
+    if (expiryDate.isBefore(DateTime.now())) {
       return false;
     }
 
@@ -99,7 +99,7 @@ class Auth with ChangeNotifier {
     return true;
   }
 
-  Future<void> logout() async{
+  Future<void> logout() async {
     _token = null;
     _userId = null;
     _expiryDate = null;
